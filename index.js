@@ -45,8 +45,8 @@ const SimpleNodeLogger = require('simple-node-logger'),
     },
     log = SimpleNodeLogger.createSimpleLogger( opts );
 
-const HOSTNAME = "localhost";
-const PORT_NUM = 4430;
+const HOSTNAME = process.env.HOST || "localhost";
+const PORT_NUM =  process.env.PORT || 4430;
 const APP_ID = "https://" + HOSTNAME + ":" + PORT_NUM;
 const BEGIN_ENROLL_ADDR = "/beginEnroll";
 const FINISH_ENROLL_ADDR = "/finishEnroll";

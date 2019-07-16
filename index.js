@@ -38,6 +38,13 @@ app.use("/js", express.static("js"));
 app.use("/css", express.static("css"));
 app.set("view engine", "pug");
 
+const SimpleNodeLogger = require('simple-node-logger'),
+    opts = {
+      logFilePath:'mylogfile.log',
+      timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS'
+    },
+    log = SimpleNodeLogger.createSimpleLogger( opts );
+
 const HOSTNAME = "localhost";
 const PORT_NUM = 4430;
 const APP_ID = "https://" + HOSTNAME + ":" + PORT_NUM;
@@ -127,6 +134,7 @@ app.get(FINISH_AUTHEN_ADDR, function(req, res) {
       deviceResponse,
       devReg);
     console.log("Authentication result: %s", JSON.stringify(authentication, null, "\t"));
+    log.info(JSON.stringify(authentication, null, "\t"));
 
     req.session.startAuthen = null;
     req.session.devReg = null;
@@ -164,3 +172,23 @@ var server = https
 
     console.log("U2F demo app started at https://%s:%s/demo", host == "127.0.0.1" ? 'localhost' : host, port);
 });
+
+decode_base64url = function(input) {
+  // Replace non-url compatible chars with base64 standard chars
+  input = input
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+
+  // Pad out with standard base64 required padding characters
+  var pad = input.length % 4;
+  if(pad) {
+    if(pad === 1) {
+      throw new Error('InvalidLengthError: Input base64url string is the wrong length to determine padding');
+    }
+    input += new Array(5-pad).join('=');
+  }
+
+  return input;
+}
+
+

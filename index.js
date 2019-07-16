@@ -165,7 +165,7 @@ app.get("/demo", function(req, res) {
 
 var server = https
   .createServer(credentials, app)
-  .listen(PORT_NUM, HOSTNAME, function () {
+  .listen(PORT_NUM,  function () {
 
     var host = server.address().address;
     var port = server.address().port;
